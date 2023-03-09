@@ -1,1 +1,1 @@
-echo shell basics readme file
+Readme file
