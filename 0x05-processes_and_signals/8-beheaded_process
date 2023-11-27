@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# This is a Bash script that terminates the process "7-highlander".
+
+# Using pgrep and xargs:
+# pgrep -f 7-highlander | xargs kill -9
+
+# Using pkill:
+pkill -9 -f 7-highlander
+
+# Using pkill with a specific command:
+# pkill -9 -f "bash ./7-highlander"
