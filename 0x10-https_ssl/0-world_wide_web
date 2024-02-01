@@ -1,18 +1,22 @@
 #!/usr/bin/env bash
+# A script that displays domain dns informations for a domain
+domaininfo () {
+	answer_section=$(dig "$1" | grep -A1 'ANSWER SECTION' | tail -n 1)
 
-#shellcheck disable=SC2086
-# Information about server domains
+	subdomain=$(echo "$answer_section" | awk '{print $1;}' FS=.) 
+	record_type=$(echo "$answer_section" | awk '{print $4;}')
+	ip_address=$(echo "$answer_section" | awk '{print $5}')
 
-check_domain() {
-    # Check for a valid domain
-    SUBDOMAINS=("www"  "lb-01" "web-01" "web-02")
-    if [ -z "$2" ]; then
-	for i in "${SUBDOMAINS[@]}"; do
-	    dig "$i.$1" | grep -A1 'ANSWER SECTION:' | tail -n1 | awk '{split($0, SUBDOMAIN, "."); print "The subdomain " SUBDOMAIN[1] " is a " $4 " record and points to " $5}'
-	done
-    else
-	dig "$2.$1" | grep -A1 'ANSWER SECTION:' | tail -n1 | awk '{split($0, SUBDOMAIN, "."); print "The subdomain " SUBDOMAIN[1] " is a " $4 " record and points to " $5}'
-    fi
+	echo "The subdomain $subdomain is a $record_type record and points to $ip_address" 
 }
 
-check_domain "$1" "$2"
+if [ $# -eq 1 ]
+then
+	domaininfo "www.$1" 
+	domaininfo "lb-01.$1"
+	domaininfo "web-01.$1"
+	domaininfo "web-02.$1"
+elif [ $# -eq 2 ]
+then
+	domaininfo "$2.$1"
+fi
