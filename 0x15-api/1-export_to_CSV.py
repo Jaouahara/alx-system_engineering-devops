@@ -16,4 +16,3 @@ if __name__ == "__main__":
         [writer.writerow(
             [user_id, username, todo.get("completed"), todo.get("title")]
          ) for todo in user_todos]
-Only the variable names have been changed while keeping everything else intact.
