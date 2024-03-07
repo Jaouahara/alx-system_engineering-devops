@@ -1,16 +1,11 @@
 # try  to replace the fix the extension error
-
-$file_path = '/var/www/html/wp-settings.php'
-
-file { $file_path:
+file { '/var/www/html/wp-settings.php':
   ensure  => file,
-  source  => $file_path,
+  source  => '/var/www/html/wp-settings.php',
   replace => false,
 }
 
-$replacement_command = 'sed -i "s/\.phpp/\.php/g"'
-
 exec { 'fix_wp_settings':
-  command => "${replacement_command} ${file_path}",
+  command => 'sed -i "s/\.phpp/\.php/g" /var/www/html/wp-settings.php',
   path    => ['/usr/bin', '/bin'],
 }
